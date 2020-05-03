@@ -37,6 +37,7 @@ def run(filename):
     zbuffer = new_zbuffer()
     tmp = []
     polygons = []
+    edges = []
     step_3d = 100
     consts = ''
     coords = []
@@ -47,7 +48,7 @@ def run(filename):
                           'blue': [0.2, 0.5, 0.5]}]
     reflect = '.white'
 
-    print(symbols)
+    #print(symbols)
     for command in commands:
         c = command['op']
         args = command['args']
@@ -102,8 +103,15 @@ def run(filename):
             matrix_mult( stack[-1], polygons )
             draw_polygons(polygons, screen, zbuffer, view, ambient, light, symbols, reflect)
             polygons = []
+        if c == "line":
+            add_edge( edges,
+                      float(args[0]), float(args[1]), float(args[2]),
+                      float(args[3]), float(args[4]), float(args[5]) )
+            matrix_mult( stack[-1], edges )
+            draw_lines(edges, screen, zbuffer, color)
+            edges = []
         if c == "display":
             display(screen)
         if c == "save":
-            save_extension(screen, args[0])
-        print("C", command['op'], command)
+            save_extension(screen, args[0]+".png")
+        #print("C", command['op'], command)
