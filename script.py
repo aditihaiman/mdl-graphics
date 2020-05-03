@@ -51,6 +51,7 @@ def run(filename):
     for command in commands:
         c = command['op']
         args = command['args']
+        reflect = '.white'
         
         if c == "push":
             stack.append( [x[:] for x in stack[-1]] )
@@ -79,9 +80,13 @@ def run(filename):
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step_3d)
             matrix_mult( stack[-1], polygons )
+            if(command['constants']):
+                reflect = command['constants']
             draw_polygons(polygons, screen, zbuffer, view, ambient, light, symbols, reflect)
             polygons = []
         if c == "box":
+            if(command['constants']):
+                reflect = command['constants']
             add_box(polygons,
                     float(args[0]), float(args[1]), float(args[2]),
                     float(args[3]), float(args[4]), float(args[5]))
@@ -89,6 +94,8 @@ def run(filename):
             draw_polygons(polygons, screen, zbuffer, view, ambient, light, symbols, reflect)
             polygons = []
         if c == "torus":
+            if(command['constants']):
+                reflect = command['constants']
             add_torus(polygons,
                       float(args[0]), float(args[1]), float(args[2]),
                       float(args[3]), float(args[4]), step_3d)
